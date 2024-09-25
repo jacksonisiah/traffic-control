@@ -1,5 +1,7 @@
 import random
 import time
+from typing import Optional, Set
+
 
 class Queue(object):
     def __init__(self, size):
@@ -54,10 +56,42 @@ class Queue(object):
         ans += "]"
         return ans
 
+class Street(object):
+    def __init__(self, green: Optional[bool] = False):
+        self.__Queue = Queue(10)
+        self.green = green
+    
+    def generate_random_car(self) -> None:
+        pass
+    
+    def remove_first_car(self):
+        pass
+    
+    def print_street_state(self) -> None:
+        pass
+    
+    def get_queue_count(self) -> int:
+        pass
+    
+    # Either returns the state of the light, or switches the light if a value is provided
+    def light(self, state: Optional[bool] = None) -> bool:
+        if state is None:
+            return self.green
+        else:
+            self.green = state
+            return self.green
+        
+
+
 def traffic_light_controller():
     # Queue Initialization: Creates a queue for each street, with a maximum size of 10.
-    queues = { }
+    street_N = Street(True) # Initializes northbound street with a green light.
+    street_S = Street()
+    street_E = Street()
+    street_W = Street()
     
+    queues: Set[Street] = {street_N, street_W, street_E, street_S}
+    iters = 0
 
     # Start with the first street in the light order
     # Always start with one green light in the North
@@ -66,6 +100,18 @@ def traffic_light_controller():
     # A Loop that simulates the behavior of cars arriving at each street and the operation of the traffic lights.
     # Random Car Generation: Each iteration randomly generates cars for the streets (35% chance per street). 
     # If a car is added, it prints the car ID and the current queue.
+        
+    for i in queues:
+        i.generate_random_car()
+        
+        if i.get_queue_count() >= 6:
+            i.light(True)        
+            # remove first car in queue for streets with green lights...
+        else:
+            i.light(False)
+
+        i.print_street_state()
+        
         
     # Print the current status of all traffic lights and their queues is printed for monitoring
     # Check if any queue has reached 6 cars or if the current queue is empty
@@ -77,4 +123,5 @@ def traffic_light_controller():
     # the first car is removed from the queue and the action is logged.
         
     # Pause the program after 10 iterations
-    
+ 
+if __name__ == "__main__":
